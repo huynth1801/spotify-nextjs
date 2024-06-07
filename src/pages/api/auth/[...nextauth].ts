@@ -1,10 +1,10 @@
-import { scopes } from "@/config/spotify";
-import NextAuth from "next-auth/next";
-import SpotifyProvider from "next-auth/providers/spotify";
-import { signIn } from "next-auth/react";
-import { pages } from "next/dist/build/templates/app-page";
+import { scopes } from "@/config/spotify"
+import NextAuth from "next-auth/next"
+import SpotifyProvider from "next-auth/providers/spotify"
+import { signIn } from "next-auth/react"
+import { pages } from "next/dist/build/templates/app-page"
 
-export const authOptions = {
+export default NextAuth({
   providers: [
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID as string,
@@ -20,6 +20,4 @@ export const authOptions = {
   pages: {
     signIn: "/login",
   },
-};
-
-export default NextAuth(authOptions);
+})

@@ -1,18 +1,24 @@
 "use client"
-
+import { Session } from "next-auth"
+import { SessionProvider } from "next-auth/react"
 import Center from "@/components/Center"
 import Sidebar from "@/components/Sidebar"
-import Image from "next/image"
 
-export default function Home() {
+interface Props {
+  session: Session | null
+}
+
+export default function Home({ session }: Props) {
   return (
-    <div className="bg-black h-screen overflow-hidden">
-      <main className="flex ">
-        {/* Sidebar */}
-        <Sidebar />
-        {/* Center */}
-        <Center />
-      </main>
-    </div>
+    <SessionProvider>
+      <div className="bg-black h-screen overflow-hidden">
+        <main className="flex ">
+          {/* Sidebar */}
+          <Sidebar />
+          {/* Center */}
+          <Center />
+        </main>
+      </div>
+    </SessionProvider>
   )
 }
