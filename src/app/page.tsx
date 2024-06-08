@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react"
 import Center from "@/components/Center"
 import Sidebar from "@/components/Sidebar"
 import PlaylistContextProvider from "@/context/PlaylistContext"
+import Player from "@/components/Player"
 
 interface Props {
   session: Session | null
@@ -20,6 +21,9 @@ export default function Home({ session }: Props) {
             {/* Center */}
             <Center />
           </main>
+          <div className="sticky bottom-0 text-white">
+            <Player />
+          </div>
         </div>
       </PlaylistContextProvider>
     </SessionProvider>

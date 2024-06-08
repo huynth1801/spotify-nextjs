@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react"
 import userIcon from "@/app/user_icon.jpg"
 import { ChevronDownIcon } from "@heroicons/react/24/outline"
 import { pickRandom } from "@/utils/pickRandom"
+import Songs from "./Songs"
 
 const colors = [
   "from-violet-700",
@@ -69,6 +70,9 @@ const Center = () => {
       </section>
 
       {/* Song */}
+      <div>
+        <Songs />
+      </div>
     </div>
   )
 }

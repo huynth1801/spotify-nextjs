@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 const config: Config = {
   content: [
@@ -21,8 +21,11 @@ const config: Config = {
         "18rem": "18rem",
         "20rem": "20rem",
       },
+      height: {
+        "7": "1.75rem",
+      },
     },
   },
   plugins: [],
-};
-export default config;
+}
+export default config

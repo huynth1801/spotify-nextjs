@@ -6,6 +6,10 @@
   .icon {
     @apply h-6 w-6;
   }
+
+  .icon-playback {
+    @apply h-6 w-6 cursor-pointer hover:scale-125;
+  }
 }
 
 @layer utilities {
