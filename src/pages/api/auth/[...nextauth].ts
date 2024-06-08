@@ -31,6 +31,15 @@ const refreshAccessToken = async (
   }
 }
 
+const sessionCallback: CallbacksOptions["session"] = async ({
+  session,
+  token,
+}) => {
+  session.accessToken = (token as ExtendedToken).accessToken
+  session.error = (token as ExtendedToken).error
+  return session
+}
+
 const jwtCallback: CallbacksOptions["jwt"] = async ({
   token,
   account,
@@ -82,5 +91,6 @@ export default NextAuth({
 
   callbacks: {
     jwt: jwtCallback,
+    session: sessionCallback,
   },
 })

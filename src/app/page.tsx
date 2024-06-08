@@ -3,6 +3,7 @@ import { Session } from "next-auth"
 import { SessionProvider } from "next-auth/react"
 import Center from "@/components/Center"
 import Sidebar from "@/components/Sidebar"
+import PlaylistContextProvider from "@/context/PlaylistContext"
 
 interface Props {
   session: Session | null
@@ -11,14 +12,16 @@ interface Props {
 export default function Home({ session }: Props) {
   return (
     <SessionProvider>
-      <div className="bg-black h-screen overflow-hidden">
-        <main className="flex ">
-          {/* Sidebar */}
-          <Sidebar />
-          {/* Center */}
-          <Center />
-        </main>
-      </div>
+      <PlaylistContextProvider>
+        <div className="bg-black h-screen overflow-hidden">
+          <main className="flex ">
+            {/* Sidebar */}
+            <Sidebar />
+            {/* Center */}
+            <Center />
+          </main>
+        </div>
+      </PlaylistContextProvider>
     </SessionProvider>
   )
 }
