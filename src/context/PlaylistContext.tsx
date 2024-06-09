@@ -8,7 +8,7 @@ import { createContext } from "react"
 const defaultPlaylistContextState: PlaylistContextState = {
   playlists: [],
   selectedPlaylistId: null,
-  selectedPlaylist: "",
+  selectedPlaylist: null,
 }
 
 export const PlayListContext = createContext<IPlaylistContext>({

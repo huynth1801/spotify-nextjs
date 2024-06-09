@@ -64,7 +64,7 @@ const Center = () => {
         <div>
           <p>PLAYLIST</p>
           <h1 className="text-2xl font-bold md:text-3xl xl:text-5xl">
-            {selectedPlaylist.name}
+            {selectedPlaylist?.name}
           </h1>
         </div>
       </section>
