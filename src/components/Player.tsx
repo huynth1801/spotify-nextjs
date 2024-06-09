@@ -7,9 +7,40 @@ import { FaCirclePlay } from "react-icons/fa6"
 import { LuPlaySquare } from "react-icons/lu"
 import { PiMicrophoneStageBold } from "react-icons/pi"
 import { LuVolume2 } from "react-icons/lu"
+import { spotifyApi } from "@/config/spotify"
+import useSpotify from "@/hooks/useSpotify"
+import { useSongContext } from "@/context/SongContext"
+import { SongReducerActionType } from "@/types"
 
 const Player = () => {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false)
+  // const [isPlaying, setIsPlaying] = useState<boolean>(false)
+
+  const spotifyApi = useSpotify()
+
+  const {
+    songContextState: { isPlaying },
+    dispatchSongAction,
+  } = useSongContext()
+
+  const handlePlayPause = async () => {
+    const response = await spotifyApi.getMyCurrentPlaybackState()
+
+    if (!response.body) return
+
+    if (response.body.is_playing) {
+      await spotifyApi.pause()
+      dispatchSongAction({
+        type: SongReducerActionType.ToggleIsPlaying,
+        payload: false,
+      })
+    } else {
+      await spotifyApi.play()
+      dispatchSongAction({
+        type: SongReducerActionType.ToggleIsPlaying,
+        payload: true,
+      })
+    }
+  }
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 grid grid-cols-3 text-xs md:text-base px-2 md:px-8">
       {/* Left */}
@@ -19,9 +50,9 @@ const Player = () => {
         <IoShuffleOutline className="icon-playback" />
         <IoMdSkipBackward className="icon-playback" />
         {isPlaying ? (
-          <MdPauseCircle className="icon-playback" />
+          <MdPauseCircle className="icon-playback" onClick={handlePlayPause} />
         ) : (
-          <FaCirclePlay className="icon-playback" />
+          <FaCirclePlay className="icon-playback" onClick={handlePlayPause} />
         )}
 
         <IoIosSkipForward className="icon-playback" />
@@ -30,9 +61,9 @@ const Player = () => {
 
       {/* Right */}
       <div className="flex justify-end items-center pr-5 space-x-3 md:space-x-4">
-        <LuPlaySquare className="icon-playback" />
-        <PiMicrophoneStageBold className="icon-playback" />
-        <LuVolume2 className="icon-playback" />
+        <LuPlaySquare className="h-5 w-5" />
+        <PiMicrophoneStageBold className="h-5 w-5" />
+        <LuVolume2 className="h-5 w-5" />
         <input type="range" min={0} max={100} className="w-20 md:w-auto" />
       </div>
     </div>

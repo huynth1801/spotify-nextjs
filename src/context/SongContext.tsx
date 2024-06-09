@@ -1,6 +1,6 @@
 import Song from "@/components/Song"
 import useSpotify from "@/hooks/useSpotify"
-import { ISongContext, SongContextState } from "@/types"
+import { ISongContext, SongContextState, SongReducerActionType } from "@/types"
 import { useSession } from "next-auth/react"
 import { ReactNode, useContext, useEffect, useReducer } from "react"
 import { createContext } from "react"
@@ -16,9 +16,10 @@ const defaultSongContextState: SongContextState = {
 
 export const SongContext = createContext<ISongContext>({
   songContextState: defaultSongContextState,
+  dispatchSongAction: () => {},
 })
 
-export const usePlaylistContext = () => useContext(SongContext)
+export const useSongContext = () => useContext(SongContext)
 
 const SongContextProvider = ({ children }: { children: ReactNode }) => {
   const spotifyApi = useSpotify()
@@ -32,16 +33,35 @@ const SongContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const setCurrentDevice = async () => {
-      const availableDeviceResponse = await spotifyApi.getMyDevices()
+      try {
+        const availableDeviceResponse = await spotifyApi.getMyDevices()
+        if (!availableDeviceResponse.body.devices.length) return
 
-      if(!availableDeviceResponse.body.devices)
+        const { id: deviceId, volume_percent } =
+          availableDeviceResponse.body.devices[0]
+
+        dispatchSongAction({
+          type: SongReducerActionType.SetDevice,
+          payload: {
+            deviceId,
+            volume: volume_percent as number,
+          },
+        })
+
+        await spotifyApi.transferMyPlayback([deviceId as string])
+      } catch (error) {
+        console.error("Error setting current device", error)
+      }
     }
+
     if (spotifyApi.getAccessToken()) {
       setCurrentDevice()
     }
   }, [spotifyApi, session])
+
   const songConTextProviderData = {
-    songContextState: defaultSongContextState,
+    songContextState,
+    dispatchSongAction,
   }
 
   return (

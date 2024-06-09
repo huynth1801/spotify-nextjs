@@ -15,8 +15,12 @@ export const SongReducer = (
         deviceId: payload.deviceId,
         volume: payload.volume,
       }
+    case SongReducerActionType.ToggleIsPlaying:
+      return {
+        ...state,
+        isPlaying: payload,
+      }
     default:
       return state
   }
-  return state
 }
