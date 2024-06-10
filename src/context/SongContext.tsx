@@ -12,6 +12,7 @@ const defaultSongContextState: SongContextState = {
   isPlaying: false,
   volume: 50,
   deviceId: null,
+  repeatMode: "off",
 }
 
 export const SongContext = createContext<ISongContext>({

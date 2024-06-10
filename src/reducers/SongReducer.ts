@@ -33,6 +33,11 @@ export const SongReducer = (
         ...state,
         volume: payload,
       }
+    case SongReducerActionType.SetRepeatMode:
+      return {
+        ...state,
+        payload: payload.repeatMode,
+      }
     default:
       return state
   }

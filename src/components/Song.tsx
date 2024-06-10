@@ -65,7 +65,7 @@ const Song = ({ item: { track }, itemIndex }: Props) => {
       </div>
 
       {/* album name */}
-      <div className="flex justify-between ml-auto md:ml-0">
+      <div className="flex justify-between items-center ml-auto md:ml-0">
         <p className="hidden md:block w-40">{track?.album.name}</p>
         <p>{converDuration(track?.duration_ms as number)}</p>
       </div>

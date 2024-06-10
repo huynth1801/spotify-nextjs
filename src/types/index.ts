@@ -39,6 +39,7 @@ export interface SongContextState {
   isPlaying: boolean
   volume: number
   deviceId: string | null
+  repeatMode: "off" | "context" | "track"
 }
 
 export interface ISongContext {
@@ -51,6 +52,7 @@ export enum SongReducerActionType {
   ToggleIsPlaying = "ToggleIsPlaying",
   SetCurrentPlayingSong = "SetCurrentPlayingSong",
   SetVolume = "SetVolume",
+  SetRepeatMode = "SetRepeatMode",
 }
 
 export type SongReducerAction =
@@ -72,4 +74,8 @@ export type SongReducerAction =
   | {
       type: SongReducerActionType.SetVolume
       payload: number
+    }
+  | {
+      type: SongReducerActionType.SetRepeatMode
+      payload: Pick<SongContextState, "repeatMode">
     }

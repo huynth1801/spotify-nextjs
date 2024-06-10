@@ -5,17 +5,19 @@ interface Props {
   iconType: IconType
   tooltipContent: string
   onClick?: React.MouseEventHandler<SVGElement>
+  customClass?: string
 }
 
 const IconPlayerButton = ({
   iconType: Icon,
   tooltipContent,
   onClick,
+  customClass = "",
 }: Props) => {
   return (
-    <div className="group relative flex justify-center">
+    <div className="group relative flex justify-center cursor-pointer">
       <Icon
-        className="h-5 w-5 hover:scale-110"
+        className={`hover:scale-110 ${customClass}`}
         data-ripple-light="true"
         data-tooltip-target="tooltip"
         onClick={onClick}

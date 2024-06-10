@@ -10,7 +10,7 @@ import { LuVolume2 } from "react-icons/lu"
 import { spotifyApi } from "@/config/spotify"
 import useSpotify from "@/hooks/useSpotify"
 import { useSongContext } from "@/context/SongContext"
-import { SongReducerActionType } from "@/types"
+import { SongContextState, SongReducerActionType } from "@/types"
 import Image from "next/image"
 import { useDebouncedCallback } from "use-debounce"
 import IconPlayerButton from "./IconPlayerButton"
@@ -23,7 +23,7 @@ const Player = () => {
   const spotifyApi = useSpotify()
 
   const {
-    songContextState: { isPlaying, selectedSong, deviceId, volume },
+    songContextState: { isPlaying, selectedSong, deviceId, volume, repeatMode },
     dispatchSongAction,
   } = useSongContext()
 
@@ -72,9 +72,29 @@ const Player = () => {
 
   const debounceAdjustVolume = useDebouncedCallback((volume: number) => {
     spotifyApi.setVolume(volume)
-  }, 500)
+  }, 300)
 
-  const handleRepeatSong = () => {}
+  const handleRepeatSong = async () => {
+    if (!deviceId) return
+
+    const newRepeatMode: SongContextState["repeatMode"] =
+      repeatMode === "off"
+        ? "context"
+        : repeatMode === "context"
+        ? "track"
+        : "off"
+
+    console.log("NEW REPEAT", newRepeatMode)
+
+    await spotifyApi.setRepeat(newRepeatMode, { device_id: deviceId })
+
+    dispatchSongAction({
+      type: SongReducerActionType.SetRepeatMode,
+      payload: {
+        repeatMode: newRepeatMode,
+      },
+    })
+  }
 
   const handleVolumeChange: React.ChangeEventHandler<HTMLInputElement> = (
     event
@@ -142,6 +162,7 @@ const Player = () => {
         <IconPlayerButton
           iconType={IoShuffleOutline}
           tooltipContent="Shuffle"
+          customClass="w-5 h-5"
         />
 
         {/* Previous button */}
@@ -149,6 +170,7 @@ const Player = () => {
           iconType={IoMdSkipBackward}
           tooltipContent="Previous"
           onClick={handleSkipSong.bind(this, "previous")}
+          customClass="w-5 h-5"
         />
 
         {isPlaying ? (
@@ -156,12 +178,14 @@ const Player = () => {
             iconType={MdPauseCircle}
             tooltipContent="Pause"
             onClick={handlePlayPause}
+            customClass="w-7 h-7"
           />
         ) : (
           <IconPlayerButton
             iconType={FaCirclePlay}
             tooltipContent="Play"
             onClick={handlePlayPause}
+            customClass="w-7 h-7"
           />
         )}
 
@@ -169,10 +193,24 @@ const Player = () => {
           iconType={IoIosSkipForward}
           tooltipContent="Next"
           onClick={handleSkipSong.bind(this, "next")}
+          customClass="w-5 h-5"
         />
 
         {/* Repeat */}
-        <IconPlayerButton iconType={BiRepeat} tooltipContent="Repeat" />
+        <IconPlayerButton
+          iconType={BiRepeat}
+          tooltipContent={
+            repeatMode === "off"
+              ? "Enable Repeat"
+              : repeatMode === "context"
+              ? "Enable Repeat One"
+              : "Disable Repeat"
+          }
+          customClass={`w-5 h-5 ${
+            repeatMode !== "off" ? "text-green-500" : ""
+          }`}
+          onClick={handleRepeatSong}
+        />
       </div>
 
       {/* Right */}
@@ -180,15 +218,18 @@ const Player = () => {
         <IconPlayerButton
           iconType={LuPlaySquare}
           tooltipContent="Now playing preview"
+          customClass="w-5 h-5"
         />
         <IconPlayerButton
           iconType={PiMicrophoneStageBold}
           tooltipContent="Lyrics"
+          customClass="w-5 h-5"
         />
         <IconPlayerButton
           iconType={isMuted ? LuVolumeX : LuVolume2}
           tooltipContent={isMuted ? "Unmute" : "Mute"}
           onClick={handleMuteVolume}
+          customClass="w-5 h-5"
         />
         <input
           type="range"
