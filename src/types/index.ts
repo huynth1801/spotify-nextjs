@@ -40,6 +40,7 @@ export interface SongContextState {
   volume: number
   deviceId: string | null
   repeatMode: "off" | "context" | "track"
+  isShuffling: boolean
 }
 
 export interface ISongContext {
@@ -53,6 +54,7 @@ export enum SongReducerActionType {
   SetCurrentPlayingSong = "SetCurrentPlayingSong",
   SetVolume = "SetVolume",
   SetRepeatMode = "SetRepeatMode",
+  SetShuffleMode = "SetShuffleMode",
 }
 
 export type SongReducerAction =
@@ -78,4 +80,8 @@ export type SongReducerAction =
   | {
       type: SongReducerActionType.SetRepeatMode
       payload: Pick<SongContextState, "repeatMode">
+    }
+  | {
+      type: SongReducerActionType.SetShuffleMode
+      payload: Pick<SongContextState, "isShuffling">
     }

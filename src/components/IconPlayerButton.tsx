@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { IconType } from "react-icons"
 
 interface Props {
@@ -18,6 +18,16 @@ const IconPlayerButton = ({
 }: Props) => {
   const [isActive, setIsActive] = useState(false)
   const [showDot, setShowDot] = useState(false)
+
+  useEffect(() => {
+    if (repeatMode === "context" || repeatMode === "track") {
+      setIsActive(true)
+      setShowDot(true)
+    } else {
+      setIsActive(false)
+      setShowDot(false)
+    }
+  }, [repeatMode])
 
   const renderNumber =
     repeatMode === "track" ? (
@@ -44,7 +54,7 @@ const IconPlayerButton = ({
         data-ripple-light="true"
         data-tooltip-target="tooltip"
       />
-      {/* {renderNumber} */}
+      {renderNumber}
       {showDot && (
         <div className="absolute w-1 h-1 bg-green-500 rounded-full top-6"></div>
       )}

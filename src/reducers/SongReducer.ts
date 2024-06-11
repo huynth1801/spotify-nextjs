@@ -38,6 +38,11 @@ export const SongReducer = (
         ...state,
         payload: payload.repeatMode,
       }
+    case SongReducerActionType.SetShuffleMode:
+      return {
+        ...state,
+        payload: payload.isShuffling,
+      }
     default:
       return state
   }

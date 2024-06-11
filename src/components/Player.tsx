@@ -22,6 +22,8 @@ const Player = () => {
     "off"
   )
 
+  const [isShuffling, setIsShuffling] = useState<boolean>(false)
+
   const spotifyApi = useSpotify()
 
   const {
@@ -138,6 +140,22 @@ const Player = () => {
     }
   }
 
+  const handleShuffle = async () => {
+    if (!deviceId) return
+
+    const newShuffleState = !isShuffling
+    setIsShuffling(newShuffleState)
+
+    await spotifyApi.setShuffle(newShuffleState, { device_id: deviceId })
+
+    dispatchSongAction({
+      type: SongReducerActionType.SetShuffleMode,
+      payload: {
+        isShuffling: newShuffleState,
+      },
+    })
+  }
+
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 grid grid-cols-3 text-xs md:text-base px-2 md:px-8">
       {/* Left */}
@@ -165,8 +183,9 @@ const Player = () => {
       <div className="flex justify-evenly items-center">
         <IconPlayerButton
           iconType={IoShuffleOutline}
-          tooltipContent="Shuffle"
-          customClass="w-5 h-5"
+          tooltipContent={isShuffling ? "Disable Shuffle" : "Enable Shuffle"}
+          customClass={`w-5 h-5 ${isShuffling ? "text-green-500" : ""}`}
+          onClick={handleShuffle}
         />
 
         {/* Previous button */}
