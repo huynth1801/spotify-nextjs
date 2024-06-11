@@ -44,6 +44,19 @@ const Song = ({ item: { track, added_at }, itemIndex }: Props) => {
     })
   }
 
+  const subtractDayFromDate = (date: string) => {
+    const addedDate = new Date(date) // Chuyển đổi ngày thêm vào thành đối tượng Date
+    const currentDate = new Date() // Lấy ngày hiện tại
+
+    // Tính số milliseconds giữa ngày hiện tại và ngày được thêm vào
+    const timeDiff = currentDate.getTime() - addedDate.getTime()
+
+    // Chuyển đổi milliseconds thành số ngày (1 ngày = 24 * 60 * 60 * 1000 milliseconds)
+    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
+
+    return daysDiff
+  }
+
   return (
     <tr
       className="text-gray-500 hover:bg-gray-900 cursor-pointer"
@@ -64,7 +77,7 @@ const Song = ({ item: { track, added_at }, itemIndex }: Props) => {
         </div>
       </td>
       <td className="px-5 py-4 truncate">{track?.album.name}</td>
-      <td className="px-5 py-4">{new Date(added_at).toLocaleDateString()}</td>
+      <td className="px-5 py-4">{subtractDayFromDate(added_at)} days ago</td>
       <td className="px-5 py-4 text-right">
         {converDuration(track?.duration_ms as number)}
       </td>
