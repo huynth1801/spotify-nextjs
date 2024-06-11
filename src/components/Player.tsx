@@ -18,11 +18,14 @@ import IconPlayerButton from "./IconPlayerButton"
 const Player = () => {
   const [previousVolume, setPreviousVolume] = useState<number>(0)
   const [isMuted, setIsMuted] = useState<boolean>(false)
+  const [repeatMode, setRepeatMode] = useState<"off" | "context" | "track">(
+    "off"
+  )
 
   const spotifyApi = useSpotify()
 
   const {
-    songContextState: { isPlaying, selectedSong, deviceId, volume, repeatMode },
+    songContextState: { isPlaying, selectedSong, deviceId, volume },
     dispatchSongAction,
   } = useSongContext()
 
@@ -78,12 +81,16 @@ const Player = () => {
 
     const newRepeatMode =
       repeatMode === "off"
-        ? "context"
+        ? "context" // Lặp lại toàn bộ danh sách phát
         : repeatMode === "context"
-        ? "track"
+        ? "track" // Lặp lại một bài hát
         : "off"
 
+    setRepeatMode(newRepeatMode)
+
     await spotifyApi.setRepeat(newRepeatMode, { device_id: deviceId })
+
+    console.log(newRepeatMode)
 
     dispatchSongAction({
       type: SongReducerActionType.SetRepeatMode,
@@ -205,6 +212,7 @@ const Player = () => {
           }
           customClass="w-5 h-5"
           onClick={handleRepeatSong}
+          repeatMode={repeatMode}
         />
       </div>
 

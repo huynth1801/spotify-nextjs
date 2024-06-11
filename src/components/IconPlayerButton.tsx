@@ -6,6 +6,7 @@ interface Props {
   tooltipContent: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   customClass?: string
+  repeatMode?: "off" | "context" | "track"
 }
 
 const IconPlayerButton = ({
@@ -13,9 +14,17 @@ const IconPlayerButton = ({
   tooltipContent,
   onClick,
   customClass = "",
+  repeatMode,
 }: Props) => {
   const [isActive, setIsActive] = useState(false)
   const [showDot, setShowDot] = useState(false)
+
+  const renderNumber =
+    repeatMode === "track" ? (
+      <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-bold text-green-500">
+        1
+      </span>
+    ) : null
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setIsActive(!isActive) // Toggle active state
@@ -35,6 +44,7 @@ const IconPlayerButton = ({
         data-ripple-light="true"
         data-tooltip-target="tooltip"
       />
+      {/* {renderNumber} */}
       {showDot && (
         <div className="absolute w-1 h-1 bg-green-500 rounded-full top-6"></div>
       )}
