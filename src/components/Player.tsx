@@ -10,13 +10,12 @@ import { LuVolume2 } from "react-icons/lu"
 import { spotifyApi } from "@/config/spotify"
 import useSpotify from "@/hooks/useSpotify"
 import { useSongContext } from "@/context/SongContext"
-import { SongContextState, SongReducerActionType } from "@/types"
+import { SongReducerActionType } from "@/types"
 import Image from "next/image"
 import { useDebouncedCallback } from "use-debounce"
 import IconPlayerButton from "./IconPlayerButton"
 
 const Player = () => {
-  // const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [previousVolume, setPreviousVolume] = useState<number>(0)
   const [isMuted, setIsMuted] = useState<boolean>(false)
 
@@ -77,14 +76,12 @@ const Player = () => {
   const handleRepeatSong = async () => {
     if (!deviceId) return
 
-    const newRepeatMode: SongContextState["repeatMode"] =
+    const newRepeatMode =
       repeatMode === "off"
         ? "context"
         : repeatMode === "context"
         ? "track"
         : "off"
-
-    console.log("NEW REPEAT", newRepeatMode)
 
     await spotifyApi.setRepeat(newRepeatMode, { device_id: deviceId })
 
@@ -140,7 +137,7 @@ const Player = () => {
       <div className="flex items-center space-x-4">
         {selectedSong && (
           <>
-            <div className="hidden md:block ">
+            <div className="hidden md:block">
               <Image
                 src={selectedSong.album.images[0].url}
                 alt={`Album cover for ${selectedSong.name}`}
@@ -206,9 +203,7 @@ const Player = () => {
               ? "Enable Repeat One"
               : "Disable Repeat"
           }
-          customClass={`w-5 h-5 ${
-            repeatMode !== "off" ? "text-green-500" : ""
-          }`}
+          customClass="w-5 h-5"
           onClick={handleRepeatSong}
         />
       </div>
