@@ -11,7 +11,7 @@ interface Props {
   itemIndex: number
 }
 
-const Song = ({ item: { track }, itemIndex }: Props) => {
+const Song = ({ item: { track, added_at }, itemIndex }: Props) => {
   const spotifyApi = useSpotify()
 
   const {
@@ -43,33 +43,32 @@ const Song = ({ item: { track }, itemIndex }: Props) => {
       },
     })
   }
+
   return (
-    <div
-      className="grid grid-cols-2 text-gray-500 px-5 py-4 hover:bg-gray-900 rounded-lg cursor-pointer"
+    <tr
+      className="text-gray-500 hover:bg-gray-900 cursor-pointer"
       onClick={playSong}
     >
-      <div className="flex items-center space-x-4">
-        <p>{itemIndex + 1}</p>
+      <td className="px-5 py-4">{itemIndex + 1}</td>
+      <td className="px-2 py-4 flex items-center space-x-4">
+        <Image
+          src={track?.album.images[0].url || ""}
+          alt="Track cover photo"
+          height={50}
+          width={50}
+          className="rounded-lg"
+        />
         <div>
-          <Image
-            src={track?.album.images[0].url || ""}
-            alt="Track cover photo"
-            height={40}
-            width={40}
-          />
+          <p className="truncate text-white">{track?.name}</p>
+          <p>{track?.artists[0].name}</p>
         </div>
-        <div>
-          <p className="w-36 lg:w-72 truncate text-white ">{track?.name}</p>
-          <p className="w-40">{track?.artists[0].name}</p>
-        </div>
-      </div>
-
-      {/* album name */}
-      <div className="flex justify-between items-center ml-auto md:ml-0">
-        <p className="hidden md:block w-40">{track?.album.name}</p>
-        <p>{converDuration(track?.duration_ms as number)}</p>
-      </div>
-    </div>
+      </td>
+      <td className="px-5 py-4 truncate">{track?.album.name}</td>
+      <td className="px-5 py-4">{new Date(added_at).toLocaleDateString()}</td>
+      <td className="px-5 py-4 text-right">
+        {converDuration(track?.duration_ms as number)}
+      </td>
+    </tr>
   )
 }
 
